@@ -1,0 +1,824 @@
+Project Title
+
+End-to-End CI/CD Pipeline on AWS using Jenkins, Ansible, Docker, ECR, EKS & EFS
+
+
+---
+
+1. Project Objective
+
+The objective of this project is to design and implement a fully automated CI/CD pipeline on AWS for a Java web application using industry-standard DevOps tools.
+
+Key Goals:
+
+Automate build, containerization, and deployment
+
+Maintain infrastructure consistency using Ansible
+
+Achieve scalable deployment using Kubernetes (EKS)
+
+Use AWS ECR for secure Docker image storage
+
+Use AWS EFS for persistent shared storage
+
+
+
+---
+
+2. Project Statement (Milestone–2)
+
+Create an end-to-end CI/CD pipeline in AWS using:
+
+Jenkins as orchestration tool
+
+GitHub as Source Code Management (SCM)
+
+Maven as build tool
+
+Docker for containerization
+
+Amazon ECR for image registry
+
+Amazon EKS for Kubernetes deployment
+
+Ansible for configuration management
+
+
+
+---
+
+3. Tools & Technologies Used
+
+Category	Tools
+
+SCM	GitHub
+CI/CD	Jenkins
+Configuration Management	Ansible
+Build Tool	Maven
+Containerization	Docker
+Cloud Platform	AWS
+Container Registry	Amazon ECR
+Orchestration	Amazon EKS
+Storage	Amazon EFS
+OS	Ubuntu 22.04
+
+
+
+---
+
+4. High-Level Architecture
+
+Three EC2 Instances:
+
+1. Jenkins Controller
+
+
+2. Build Server
+
+
+3. Docker / EKS Server
+
+
+
+AWS Managed Services:
+
+ECR (Docker image storage)
+
+EKS (Kubernetes cluster)
+
+EFS (Persistent shared storage)
+
+
+
+---
+
+5. Why Ansible?
+
+Ansible is used to automate infrastructure and software configuration.
+
+Benefits:
+
+Agentless architecture
+
+Infrastructure as Code
+
+Consistent environment across nodes
+
+Faster setup and repeatability
+
+
+Ansible manages:
+
+User creation
+
+Software installation
+
+SSH configuration
+
+Jenkins, Docker, Java, Maven setup
+
+
+
+---
+
+6. Why Separate Jenkins, Build & Docker Nodes?
+
+Node	Purpose
+
+Jenkins Controller	Pipeline orchestration
+Build Node	Maven build & WAR creation
+Docker/EKS Node	Docker build, ECR push & Kubernetes deploy
+
+
+Benefits:
+
+Better performance
+
+Security isolation
+
+Real-time industry architecture
+
+
+
+---
+
+7. CI/CD Pipeline Flow
+
+1. Developer pushes code to GitHub
+
+
+2. Jenkins pipeline is triggered
+
+
+3. Maven builds Java WAR on build node
+
+
+4. Docker image is created
+
+
+5. Image pushed to AWS ECR
+
+
+6. Kubernetes deploys image on EKS
+
+
+7. Application runs with EFS mounted
+
+
+
+
+---
+
+8. Jenkins Pipeline Responsibilities
+
+Source code checkout from GitHub
+
+Trigger remote jobs on build node
+
+Coordinate Docker image creation
+
+Authenticate with ECR
+
+Trigger Kubernetes deployment
+
+
+Jenkins acts as the central orchestrator
+
+
+---
+
+9. Maven Build Stage
+
+Source code compiled
+
+Dependencies resolved
+
+WAR file generated
+
+
+Why Maven?
+
+Standard Java build tool
+
+Dependency management
+
+Lifecycle automation
+
+
+
+---
+
+10. Dockerization Stage
+
+WAR file copied into Docker image
+
+Application packaged with dependencies
+
+Image tagged for ECR
+
+
+Why Docker?
+
+Environment consistency
+
+Application portability
+
+Faster deployments
+
+
+
+---
+
+11. Amazon ECR
+
+Private Docker image repository
+
+Secure storage of container images
+
+Integrated with EKS
+
+
+Why ECR?
+
+AWS-native
+
+IAM-based authentication
+
+High availability
+
+
+
+---
+
+12. Amazon EKS
+
+Managed Kubernetes service
+
+Handles container orchestration
+
+Auto-scaling and self-healing
+
+
+Why EKS?
+
+Eliminates Kubernetes control-plane management
+
+Highly scalable
+
+Production-ready
+
+
+
+---
+
+13. Amazon EFS (Persistent Storage)
+
+EFS is used to provide shared and persistent storage to Kubernetes pods.
+
+Why EFS?
+
+Data persists even if pods restart
+
+Shared storage across multiple pods
+
+Ideal for logs, uploads, application data
+
+
+EFS is mounted manually to the EKS worker nodes
+
+
+---
+
+14. Manual Tasks Performed
+
+Some tasks were performed manually as per project scope:
+
+EKS cluster creation
+
+ECR repository creation
+
+EFS creation and mount
+
+Docker reboot after configuration
+
+
+These services are later used by Jenkins and Ansible automation.
+
+
+---
+
+15. Security Considerations
+
+Dedicated Jenkins user
+
+Password-less SSH via keys
+
+IAM authentication for ECR
+
+Kubernetes RBAC
+
+
+
+---
+
+16. Benefits of This Architecture
+
+Fully automated CI/CD pipeline
+
+Scalable Kubernetes deployment
+
+Persistent storage using EFS
+
+Reusable Ansible automation
+
+Real-world DevOps implementation
+
+
+
+---
+
+17. Challenges Faced
+
+Jenkins SSH access issues
+
+Docker permission errors
+
+EKS authentication setup
+
+EFS mounting configuration
+
+
+Resolved using:
+
+Ansible automation
+
+Proper IAM roles
+
+Correct user permissions
+
+
+
+---
+
+18. Outcome
+
+Successful end-to-end CI/CD pipeline
+
+Application deployed on Kubernetes
+
+Docker images stored in ECR
+
+Persistent storage via EFS
+
+Zero manual build/deploy effort
+
+
+
+---
+
+19. Conclusion
+
+This project demonstrates a complete DevOps lifecycle using AWS-native and open-source tools. It reflects real-world CI/CD practices with automation, scalability, and reliability.
+
+
+---
+
+20. Step-by-Step Execution Guide (Beginner Friendly)
+
+This section explains each action in detail, including where to go, what to click, and what command to run. A person with zero DevOps knowledge can follow this and complete the project.
+
+
+---
+
+STEP 1: AWS Account & Prerequisites (Very Detailed)
+
+1. Open browser → go to https://aws.amazon.com/
+
+
+2. Click Sign in to the Console
+
+
+3. Login using your AWS account credentials
+
+
+4. On top-right corner, select region Asia Pacific (Mumbai – ap-south-1)
+
+
+
+Create Key Pair
+
+5. Go to EC2 → Key Pairs
+
+
+6. Click Create key pair
+
+
+7. Name: devops-key
+
+
+8. Key pair type: RSA
+
+
+9. Private key file format: .pem
+
+
+10. Click Create key pair
+
+
+11. Key file will download automatically → store safely
+
+
+
+IAM Permissions (If required)
+
+12. Go to IAM → Users → Your User
+
+
+13. Attach policies:
+
+
+
+AmazonEC2FullAccess
+
+AmazonECRFullAccess
+
+AmazonEKSFullAccess
+
+AmazonEFSFullAccess
+
+
+
+---
+
+1. Login to AWS Console
+
+
+2. Select Region (recommended: ap-south-1)
+
+
+3. Create a Key Pair (PEM format)
+
+
+4. Ensure IAM user has:
+
+EC2 full access
+
+ECR full access
+
+EKS full access
+
+EFS full access
+
+
+
+
+
+---
+
+STEP 2: Create EC2 Instances
+
+Go to EC2 → Launch Instance
+
+Create 3 Ubuntu 22.04 EC2 instances:
+
+Instance 1: Jenkins Controller
+
+Name: jenkins-controller
+
+Instance type: t2.medium
+
+Storage: 20 GB
+
+Security Group:
+
+SSH (22) – My IP
+
+Custom TCP (8080) – Anywhere
+
+
+
+Instance 2: Build Server
+
+Name: build-node
+
+Instance type: t2.medium
+
+Storage: 20 GB
+
+Security Group:
+
+SSH (22) – My IP
+
+
+
+Instance 3: Docker / EKS Server
+
+Name: docker-eks-node
+
+Instance type: t2.medium
+
+Storage: 30 GB
+
+Security Group:
+
+SSH (22) – My IP
+
+
+
+
+---
+
+STEP 3: Login to Jenkins Controller
+
+ssh -i key.pem ubuntu@<jenkins-public-ip>
+
+Update system:
+
+sudo apt update && sudo apt upgrade -y
+
+
+---
+
+STEP 4: Install Ansible (Controller)
+
+sudo apt install ansible -y
+ansible --version
+
+Purpose: Control all servers from one machine
+
+
+---
+
+STEP 5: Setup Ansible Inventory
+
+sudo nano /etc/ansible/hosts
+
+Paste:
+
+[jenkins]
+<jenkins-private-ip>
+
+[build]
+<build-private-ip>
+
+[docker]
+<docker-private-ip>
+
+[slaves:children]
+build
+docker
+
+Save and exit
+
+
+---
+
+STEP 6: SSH Key Configuration
+
+ssh-keygen
+
+Copy public key to nodes using Ansible (automated later)
+
+
+---
+
+STEP 7: Connectivity Test
+
+ansible all -m ping
+
+Expected: SUCCESS
+
+
+---
+
+STEP 8: Create Jenkins User (Automation)
+
+Run Ansible commands to:
+
+Create jenkins user
+
+Add sudo access
+
+Enable password-less execution
+
+
+Purpose: Security best practice
+
+
+---
+
+STEP 9: Install Java 17 & Jenkins
+
+Java 17 required for Jenkins
+
+Jenkins installed via official repo
+
+
+Verify:
+
+systemctl status jenkins
+
+Access Jenkins:
+
+http://<jenkins-ip>:8080
+
+
+---
+
+STEP 10: Jenkins Initial Configuration
+
+1. Open browser → Jenkins URL
+
+
+2. Unlock Jenkins (from /var/lib/jenkins/secrets/initialAdminPassword)
+
+
+3. Install suggested plugins
+
+
+4. Create admin user
+
+
+
+
+---
+
+STEP 11: SSH Setup for Jenkins
+
+Create .ssh directory for jenkins user
+
+Copy authorized_keys
+
+
+Purpose: Jenkins needs SSH access to build & docker nodes
+
+
+---
+
+STEP 12: Install Docker (Docker Node)
+
+curl -fsSL https://get.docker.com | sh
+
+Add Jenkins user to docker group
+
+Verify:
+
+docker ps
+
+
+---
+
+STEP 13: Install AWS CLI, kubectl & eksctl
+
+AWS CLI
+
+Used to authenticate Docker to ECR
+
+kubectl
+
+Used to deploy application to Kubernetes
+
+eksctl
+
+Used to create and manage EKS cluster
+
+Verify versions after install
+
+
+---
+
+STEP 14: Create AWS ECR Repository (Manual)
+
+Go to: AWS Console → ECR → Create Repository
+
+Copy repository URI
+
+
+---
+
+STEP 15: Create EKS Cluster (Manual)
+
+eksctl create cluster --name demo-cluster
+
+Verify:
+
+kubectl get nodes
+
+
+---
+
+STEP 16: Create & Mount EFS (Manual)
+
+1. Go to EFS → Create File System
+
+
+2. Attach to same VPC as EKS
+
+
+3. Mount EFS to worker nodes
+
+
+
+Purpose: Persistent storage for pods
+
+
+---
+
+STEP 17: Install Java 8 & Maven (Build Node)
+
+Java 8 needed for application compatibility
+
+Verify:
+
+mvn -version
+
+
+---
+
+STEP 18: GitHub Repository Setup
+
+https://github.com/sairam-swamy/maventomcatsnakes
+
+Used as SCM for Jenkins
+
+
+---
+
+STEP 19: Jenkins Webhook Setup
+
+Jenkins Side:
+
+Job → Configure → Build Triggers
+
+Enable GitHub hook trigger
+
+
+GitHub Side:
+
+Repo → Settings → Webhooks
+
+Payload URL:
+
+
+http://<jenkins-ip>:8080/github-webhook/
+
+
+---
+
+STEP 20: Jenkins Pipeline Execution
+
+Pipeline stages:
+
+1. Git checkout
+
+
+2. Maven build
+
+
+3. Docker build
+
+
+4. Push to ECR
+
+
+5. Deploy to EKS
+
+
+
+
+---
+
+STEP 21: Validate Application
+
+kubectl get pods
+kubectl get svc
+
+Access application via LoadBalancer URL
+
+
+---
+
+STEP 22: Cleanup (Mandatory)
+
+Delete EKS cluster
+
+Delete ECR repository
+
+Delete EFS
+
+Terminate EC2 instances
+
+
+Purpose: Avoid AWS charges
+
+
+---
+
+Final Note
+
+This document is a complete execution manual for Milestone-2 and can be followed by any beginner to successfully run the project end-to-end.
+
+
+---
+
+End of Document
