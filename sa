@@ -1,0 +1,33 @@
+Project Milestone 2 - Create an end to end CI/CD pipeline in AWS platform using Jenkins as the orchestration tool, Github as the SCM, Maven as the Build tool, Deploy in a docker instance and create a Docker image, Store the docker image in ECR, Achieve Kubernetes deployment using ECR image. Build a sample java web app using maven.
+Process:
+Objective: Build & deploy a sample Java web app with Maven, containerize it with Docker, push the image to Amazon ECR, and deploy to Kubernetes—fully automated via a Jenkins CI/CD pipeline, with infrastructure actions orchestrated by Ansible and shared artifacts on EFS.
+Tools used: 
+•	SCM: GitHub (main branch, webhook to Jenkins)
+•	CI/CD Orchestrator: Jenkins controller with two agents:
+o	build agent: Java 8 + Maven
+o	docker agent: Docker CLI + aws CLI + kubectl
+•	Amazon EFS (mounted to Jenkins paths for sharing build outputs/config)
+•	Amazon ECR (public or private):to store images.
+•	Kubernetes (EKS), deploying a Tomcat-based app from ECR image
+•	Configuration management: Ansible for package install, user/perm setup, EFS mounts, and service files
+AWS SERVICES AND THEIR PURPOSE
+•	Amazon VPC (Virtual Private Cloud)
+o	To create a secure, isolated network environment for all resources (EC2, EFS, EKS).
+o	Provides subnets, route tables, and networking for the pipeline infrastructure.
+•	Amazon EC2 (Elastic Compute Cloud)
+o	To host Jenkins controller and agents for build and deployment tasks.
+o	Compute instances for Jenkins orchestration, Maven build, Docker image creation, and Kubernetes operations.
+•	Amazon EFS (Elastic File System)
+o	To share files (source code, build artifacts) between Jenkins controller and agents.
+o	Acts as a centralized storage accessible by multiple EC2 instances.
+•	Amazon ECR (Elastic Container Registry)
+o	To store and manage Docker images securely.
+o	Repository for the application image built by Jenkins before Kubernetes deployment.
+•	Amazon EKS (Elastic Kubernetes Service)
+o	To deploy and manage the containerized application in a scalable, orchestrated environment.
+o	Runs Kubernetes cluster for production-grade deployment.
+•	AWS IAM (Identity and Access Management)
+o	To manage permissions and roles for EC2, ECR, and EKS access.
+o	secure access control for Jenkins and agents.
+
+
