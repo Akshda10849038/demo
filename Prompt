@@ -1,0 +1,54 @@
+You are a Senior DevOps Architect and Technical Assessor.
+I have uploaded a document that contains process steps, flowcharts, diagrams, and system flow.
+Your task is to analyze the document thoroughly and produce assessment-ready questions and answers strictly based on the content of the document.
+Deliverables (NO GENERIC ANSWERS):
+1. System Architecture Explanation
+Explain the complete system architecture shown or implied in the document
+Identify:
+Components (services, servers, pipelines, tools, environments)
+Communication flow between components
+Deployment environment (cloud/on-prem/hybrid if mentioned)
+CI/CD, monitoring, logging, security touchpoints
+2. End-to-End Program Flow (Flowchart Breakdown)
+Explain the program/process flow step by step
+Map each flowchart block → actual action
+Explain:
+Inputs
+Decision points
+Success paths
+Failure paths
+Retry/rollback logic (if present)
+3. Detailed Process Steps
+Convert the document into:
+Clear sequential steps
+What happens at each step
+Why that step exists
+What can go wrong at that step
+4. Assessment Questions & Answers Create realistic interview/assessment questions in these categories:
+A. Architecture & Design
+Why was this architecture chosen?
+What are the bottlenecks?
+How would you scale this system?
+B. Flowchart & Process Understanding
+Explain a specific flowchart path
+What happens if a decision condition fails?
+C. DevOps & CI/CD
+Pipeline stages involved
+Failure handling
+Environment separation
+D. Reliability, Security & Monitoring
+Logging/monitoring points
+Error handling strategy
+Security risks and mitigations
+E. Scenario-Based Questions
+“What if X component fails?”
+“How would you improve this flow?”
+For every question, provide:
+A clear, technically accurate answer
+A short explanation of why that answer is correct
+Constraints:
+Use ONLY the content of the uploaded document
+If something is missing, explicitly say “Not specified in the document”
+Avoid buzzwords unless justified by the document
+Depth > breadth
+Output must be structured, technical, and assessment-ready.
